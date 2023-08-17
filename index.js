@@ -25,6 +25,10 @@ const useSchema = new mongoose.Schema({
 const userModel = mongoose.model("NewsUser", useSchema)
 app.use(express.json())
 
+app.get('/', (req, res) => {
+    res.send("Hey")
+})
+
 // app.use('/user', UserRouting)
 app.post('/login', async (req, res) => {
     const { email, pass } = req.body
