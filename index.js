@@ -6,8 +6,9 @@ const cors = require('cors')
 require('dotenv').config()
 const port = process.env.port || 5000
 app.use(cors())
+
 const ConnectionDB = async () => {
-    await mongoose.connect("mongodb+srv://satyam:teSMfNJt3fysRZov@newsweb.gjptu7l.mongodb.net/?retryWrites=true&w=majority").then(
+    await mongoose.connect("mongodb+srv://satyam:20172522@newsweb.gjptu7l.mongodb.net/?retryWrites=true&w=majority").then(
         () => {
             console.log(' DB conection')
         }
@@ -15,7 +16,9 @@ const ConnectionDB = async () => {
         console.log('error phase : During in DB conection')
     })
 }
+
 ConnectionDB()
+
 const useSchema = new mongoose.Schema({
     name: String,
     email: String,
@@ -41,6 +44,7 @@ app.post('/login', async (req, res) => {
         return res.json({ "message": "User Does Not Exist pls register!" })
     }
 })
+
 
 app.post('/register', async (req, res) => {
     const { name, email, pass } = req.body
@@ -88,6 +92,7 @@ app.post('/artices', async (req, res) => {
         return res.send(error)
     }
 })
+
 
 
 
