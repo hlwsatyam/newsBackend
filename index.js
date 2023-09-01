@@ -37,7 +37,7 @@ app.post('/login', async (req, res) => {
     const { email, pass } = req.body
     try {
         const ExistUser = await userModel.findOne({ email: email })
-        if (ExistUser.password == pass) { return res.json({ "message": "login successfully!" }) } else {
+        if (ExistUser.password == pass) { return res.json({ "message": "login successfully!", "id": ExistUser._id }) } else {
             return res.json({ "message": "pass err!" })
         }
     } catch (error) {
@@ -61,7 +61,7 @@ app.post('/register', async (req, res) => {
         })
         user.save()
             .then((data) => {
-                return res.json({ "message": "Successfully registered!" })
+                return res.json({ "message": "Successfully registered!", "id": user._id })
             }).catch(() => {
                 return res.json({ "message": "failed register!" })
             })
@@ -69,13 +69,18 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/save', async (req, res) => {
-    const { email, article } = req.body
+    const { id, article, title } = req.body
     let Details;
     try {
-        let Details = await userModel.findOne({ email: email })
-        let articles = [article, ...Details.savearticles];
+        let Details = await userModel.findOne({ _id: id })
+
+        if (!Details) {
+            return res.send([])
+        }
+
+        let articles = [{ article, title }, ...Details.savearticles];
         let articlesId = Details._id;
-        await userModel.findByIdAndUpdate(articlesId, { savearticles: articles })
+        await userModel.findByIdAndUpdate(id, { savearticles: articles })
     } catch (error) {
         console.log(error)
     }
@@ -83,9 +88,9 @@ app.post('/save', async (req, res) => {
 })
 
 app.post('/artices', async (req, res) => {
-    const { EmailForArticle } = req.body
+    const { id } = req.body
     try {
-        let Details = await userModel.findOne({ email: EmailForArticle })
+        let Details = await userModel.findOne({ _id: id })
         let articles = Details.savearticles;
         return res.send(articles)
     } catch (error) {
